@@ -294,16 +294,16 @@ namespace SoporteEnLinea.Controllers
             return View();
         }
 
-        //PROBANDOOOOOOOOO0000 mix
+        //
         // POST: /Account/ExternalLogin
-        [HttpPost]
+        /*[HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
             // Solicitar redireccionamiento al proveedor de inicio de sesión externo
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
-        }
+        }*/
 
         //
         // GET: /Account/SendCode
@@ -342,7 +342,7 @@ namespace SoporteEnLinea.Controllers
 
         //
         // GET: /Account/ExternalLoginCallback
-        [AllowAnonymous]
+        /*[AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
@@ -406,7 +406,7 @@ namespace SoporteEnLinea.Controllers
 
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
-        }
+        }*/
 
         //
         // POST: /Account/LogOff
@@ -420,11 +420,11 @@ namespace SoporteEnLinea.Controllers
 
         //
         // GET: /Account/ExternalLoginFailure
-        [AllowAnonymous]
+        /*[AllowAnonymous]
         public ActionResult ExternalLoginFailure()
         {
             return View();
-        }
+        }*/
 
         protected override void Dispose(bool disposing)
         {
