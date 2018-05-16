@@ -294,7 +294,7 @@ namespace SoporteEnLinea.Controllers
             return View();
         }
 
-        //PROBANDOOOOOOOOO
+        //PROBANDOOOOOOOOO0000 mix
         // POST: /Account/ExternalLogin
         [HttpPost]
         [AllowAnonymous]
