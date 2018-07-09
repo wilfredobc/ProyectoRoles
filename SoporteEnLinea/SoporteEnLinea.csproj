@@ -200,7 +200,6 @@
     <Compile Include="Migrations\201805161404086_eliminando-roleid-de-sql.Designer.cs">
       <DependentUpon>201805161404086_eliminando-roleid-de-sql.cs</DependentUpon>
     </Compile>
-    <Compile Include="Repository\RepositorioGenericoImp.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -213,7 +212,6 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\IRepositorioGenerico.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

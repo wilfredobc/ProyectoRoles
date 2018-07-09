@@ -23,6 +23,14 @@ textarea {
     max-width: 280px;
 }
 
+#contenedorLogin {    
+    display: flex;    
+    justify-content: center;   
+}
+
+#contenedorLoginHijo {
+    width: 700px;
+}
 
 
 

@@ -1,0 +1,7 @@
+ADMINISTRADOR
+Username: admin@admin.com
+Password: @123456Aa.
+
+NORMAL
+Username: normal@normal.com
+Password: @123456Aa.

@@ -25,11 +25,12 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
                     <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>                    
+                    <li>@Html.ActionLink("Contacto", "Contact", "Home")</li> 
+                    
                     @if (User.IsInRole("Administrador"))
                     {
                         <li>@Html.ActionLink("Roles", "Index", "Roles")</li>
-                        <li>@Html.ActionLink("Registrar nuevo usuario", "Register", "Account")</li>
+                        <li>@Html.ActionLink("Registrarse nuevo usuario", "Register", "Account")</li>
                     }                  
                     
                 </ul>

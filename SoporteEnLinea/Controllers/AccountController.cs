@@ -137,7 +137,8 @@ namespace SoporteEnLinea.Controllers
 
         //
         // GET: /Account/Register
-        [Authorize(Roles ="Administrador")]
+        //[Authorize(Roles ="Administrador")]
+        [AllowAnonymous]
         public ActionResult Register()
         {
             //Esta parte de codigo es mio para crear el selectList
@@ -152,44 +153,93 @@ namespace SoporteEnLinea.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [Authorize(Roles = "Administrador")]
+        //[Authorize(Roles = "Administrador")]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register([Bind(Include = "Email,Password,ConfirmPassword,roleId")] RegisterViewModel model)
         {
             ApplicationDbContext db = new ApplicationDbContext();
             var roleStore = new RoleStore<IdentityRole>(db);
-            var roleMngr = new RoleManager<IdentityRole>(roleStore);
-            var rol = roleMngr.FindById(model.roleId);
+            var roleMngr = new RoleManager<IdentityRole>(roleStore);            
             ViewBag.roleId = new SelectList(roleMngr.Roles, "Id", "Name", model.role);
-
-            if (ModelState.IsValid)
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            bool usuarioEnRol;
+            var usuarioLogueado = User.Identity.GetUserId();
+            if (usuarioLogueado == null)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-
-               
-                if (result.Succeeded)
-                {
-                    //Esta linea es la que se encarga de loggear el usuario luego que se registra.
-                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Enviar correo electrónico con este vínculo
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirmar cuenta", "Para confirmar la cuenta, haga clic <a href=\"" + callbackUrl + "\">aquí</a>");
-
-
-
-                    var idUsuarioActual = user.Id;
-                    var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
-                    var nombreRole = model.role;
-                    userManager.AddToRole(idUsuarioActual, rol.Name);
-
-                    return RedirectToAction("Index", "Home");
-                }
-                AddErrors(result);
+                usuarioEnRol = false;
             }
+            else
+            {
+                usuarioEnRol = userManager.IsInRole(usuarioLogueado, "Administrador");
+            }                   
+           
+            if (usuarioEnRol)
+            {
+                var rol = roleMngr.FindById(model.roleId);
+                if (ModelState.IsValid)
+                {
+                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                    var result = await UserManager.CreateAsync(user, model.Password);
+
+
+                    if (result.Succeeded)
+                    {
+                        //Esta linea es la que se encarga de loggear el usuario luego que se registra.
+                        //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+
+                        // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+                        // Enviar correo electrónico con este vínculo
+                        // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        // await UserManager.SendEmailAsync(user.Id, "Confirmar cuenta", "Para confirmar la cuenta, haga clic <a href=\"" + callbackUrl + "\">aquí</a>");
+
+
+
+                        var idUsuarioActual = user.Id;
+                        var nombreRole = model.role;
+                        userManager.AddToRole(idUsuarioActual, rol.Name);
+
+                        return RedirectToAction("Index", "Home");
+                    }
+                    AddErrors(result);
+                }
+            }
+            else
+            {
+                model.roleId = "721e27ea-69c0-45d6-ac38-fde99e75016d";
+                var rol = roleMngr.FindById(model.roleId);
+
+                if (ModelState.IsValid)
+                {
+                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                    var result = await UserManager.CreateAsync(user, model.Password);
+
+
+                    if (result.Succeeded)
+                    {
+                        //Esta linea es la que se encarga de loggear el usuario luego que se registra.
+                        await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+
+                        // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+                        // Enviar correo electrónico con este vínculo
+                        // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        // await UserManager.SendEmailAsync(user.Id, "Confirmar cuenta", "Para confirmar la cuenta, haga clic <a href=\"" + callbackUrl + "\">aquí</a>");
+
+
+
+                        var idUsuarioActual = user.Id;
+                        var nombreRole = model.role;
+                        userManager.AddToRole(idUsuarioActual, rol.Name);
+
+                        return RedirectToAction("Index", "Home");
+                    }
+                    AddErrors(result);
+                }
+            }
+
+            
 
             // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
             return View(model);
